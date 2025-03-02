@@ -1,12 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
+import { debounce } from "lodash";
 
-export default function SearchBar() {
+export default function SearchBar({ onSearch }) {
   const [query, setQuery] = useState("");
 
   function handleInputChange(e) {
     setQuery(e.target.value);
   }
+
+  // this ensures an API call is delayed by 500ms for every query search
+  useEffect(() => {
+
+    const debouncedSearch = debounce((searchItem) => {
+        onSearch(searchItem);
+      }, 500);
+
+    if (query) {
+      debouncedSearch(query);
+    }
+
+    //cleanup debounce on unmout
+    return () => debouncedSearch.cancel();
+  }, [query, onSearch]);
 
   return (
     <div className="w-full flex justify-center gap-5">
@@ -18,7 +34,7 @@ export default function SearchBar() {
         onChange={handleInputChange}
       />
       <button className="p-5 bg-white text-black hover:bg-blue-600 rounded-full hover:text-white">
-        <FiSearch/>
+        <FiSearch />
       </button>
     </div>
   );
