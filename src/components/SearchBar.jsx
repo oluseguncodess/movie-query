@@ -11,21 +11,20 @@ export default function SearchBar({ onSearch }) {
 
   // this ensures an API call is delayed by 500ms for every query search
   useEffect(() => {
-
     const debouncedSearch = debounce((searchItem) => {
+      if (searchItem.trim().length > 2) {
         onSearch(searchItem);
-      }, 500);
+      }
+    }, 500);
 
-    if (query) {
-      debouncedSearch(query);
-    }
+    debouncedSearch(query);
 
     //cleanup debounce on unmout
     return () => debouncedSearch.cancel();
   }, [query, onSearch]);
 
   return (
-    <div className="w-full flex justify-center gap-5">
+    <div className="w-full flex justify-center gap-5 mb-7">
       <input
         type="text"
         placeholder="Search for a movie..."
