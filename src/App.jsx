@@ -6,8 +6,6 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  console.log(movies);
-
   const handleSearch = useCallback(async (query) => {
     if (query.trim().length === 0) return;
     setLoading(true);
